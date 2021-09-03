@@ -1,0 +1,11 @@
+<launch> 
+   <!-- start node -->
+	<node name="adma_can_connect" type="adma_can_connect" pkg="adma_connect" output="screen" args="">
+      <param name="path_to_adma_dbc_file" value='/home/daniel/Schreibtisch/mobEx/config/CAN-DB/ADMA_CAN-DBC_v32_v30_2_0_0.dbc' />
+         <!--    Format 'mobEx/config/CAN-DB/ADMA_CAN-DBC_v32_v30_2_0_0.dbc'     -->
+      <param name="path_to_sensor_dbc_file" value='/home/daniel/Schreibtisch/mobEx/config/CAN-DB/ADMA_CAN-DBC_v32_v30_2_0_0.dbc' />
+         <!--    Format 'mobEx/config/CAN-DB/ADMA_CAN-DBC_v32_v30_2_0_0.dbc'     -->
+      <param name="base_id_adma" value='100' />
+         <!--    Format 'socketcan'     -->
+   </node>
+</launch>

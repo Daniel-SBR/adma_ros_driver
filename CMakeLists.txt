@@ -13,6 +13,7 @@ find_package(catkin REQUIRED
     rospy
     std_msgs
     message_generation
+    can_msgs
   )
 
 ## System dependencies are found with CMake's conventions
@@ -48,6 +49,7 @@ catkin_python_setup()
  generate_messages(
    DEPENDENCIES
    std_msgs
+   can_msgs
  )
 
 ###################################
@@ -66,6 +68,7 @@ catkin_package(
   DEPENDS 
   boost
   message_runtime
+  can_msgs
   )
 
 ###########

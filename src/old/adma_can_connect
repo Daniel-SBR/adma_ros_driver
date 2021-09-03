@@ -34,7 +34,6 @@ class GPSClass():
     
     def set_lat_long(self, latitude, longitude):
         self.__latitude = latitude
-        self.__longitude = longitude
 
     def set_altitude(self, altitude):
         self.__altitude = altitude
@@ -192,7 +191,6 @@ def decode_CAN_data():
     
     def convert_msgs(can_id, header, decoded_msgs):
         msgs = pd.DataFrame.from_dict([decoded_msgs])
-        print("msgs", msgs)
         
         secs = header.stamp.secs
         nsecs = header.stamp.nsecs
@@ -243,9 +241,9 @@ def decode_CAN_data():
         
         def __euler_to_quaternions():
             #print(can_identifier+" Euler data = ")
-            roll = msgs.loc[0, "Tilt_Roll"]
-            pitch = msgs.loc[0, "Tilt_Pitch"]
-            yaw = msgs.loc[0, "Tilt_Yaw"]
+            roll = msgs.loc[0, "Angle_Roll"]
+            pitch = msgs.loc[0, "Angle_Pitch"]
+            yaw = msgs.loc[0, "Angle_Yaw"]
 
             ## tf not available with python3 and ros melodic so using transforms3d library
             quat_tf = transforms3d.taitbryan.euler2quat(yaw, pitch, roll)
@@ -258,7 +256,7 @@ def decode_CAN_data():
 
         def __ins_time_utc():
             '''Realtime not used right now, timestamp ROS is already added in GPS_absolut. TBD'''
-            millisec = msgs.loc[0, "ADMA_Time_Millisec"]
+            millisec = msgs.loc[0, "INS_Time_Millisec"]
             time.secs = (millisec/1000) % 60
             time.nsecs = 0                                     # TBD
 
@@ -310,7 +308,6 @@ def decode_CAN_data():
             print("Please insert ID in DBC Sensor file")
         else:
             output = db_adma.decode_message(Frame.id, Frame.data)
-            print("output: ", output)
 
         if output is not None:
             convert_msgs(can_id=Frame.id, header=Frame.header, decoded_msgs=output)
