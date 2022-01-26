@@ -14,6 +14,7 @@ find_package(catkin REQUIRED
     std_msgs
     message_generation
     can_msgs
+    geometry_msgs
   )
 
 ## System dependencies are found with CMake's conventions
@@ -44,12 +45,14 @@ catkin_python_setup()
    FILES
    Adma.msg
    Adma_delta.msg
+   ego_status.msg ##changed
  )
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
    std_msgs
    can_msgs
+   geometry_msgs
  )
 
 ###################################
