@@ -74,6 +74,7 @@ class GPSClass():
         # gps_msg.status = Fix
         
         # according to ADMA documentation, INS_Lat_Rel and INS_Long_Rel "best position available in sense of precision"
+        gps_msg.header.frame_id = "adma"
         gps_msg.altitude = self.__get_altitude()
         gps_msg.header.stamp.secs = self.__get_secs()
         gps_msg.header.stamp.nsecs = self.__get_nsecs()                  # TBD
@@ -133,6 +134,7 @@ class ImuClass():
 
     def publish_imu_data(self):
         imu_msg=Imu()
+        imu_msg.header.frame_id = "adma"
         imu_msg.orientation=self.__get_quaternions()
         #imu_msg.orientation_covariance= 
         imu_msg.angular_velocity=self.__get_angular_velocity()
@@ -219,6 +221,7 @@ class EgoStatusClass():
     def publish_ego_status_data(self):
         ego_status_msg = ego_status()
         ego_status_msg.header.stamp = rospy.Time.now()
+        ego_status_msg.header.frame_id = "adma"
         ego_status_msg.pos = self.__get_position()
         ego_status_msg.vel_lin = self.__get_velocity()
         ego_status_msg.acc_lin = self.__get_acceleration()
@@ -419,6 +422,7 @@ def decode_CAN_data():
         
         if Frame.id < base_id_adma or Frame.id > base_id_adma+84:
             #output = db_sensors.decode_message(Frame.id, Frame.data)
+            output = None
             print("Please insert ID in DBC Sensor file")
         else:
             output = db_adma.decode_message(Frame.id, Frame.data)
