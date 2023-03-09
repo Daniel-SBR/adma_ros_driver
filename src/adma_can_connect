@@ -161,6 +161,12 @@ class EgoStatusClass():
         self.__vel_roll = 0
         self.__vel_pitch = 0
         self.__vel_yaw = 0
+        self.__gpsweek = 0
+        self.__gpsmsecs = 0
+        
+    def set_adma_time(self, gpsweek, gpsmsecs):
+        self.__gpsweek = gpsweek
+        self.__gpsmsecs = gpsmsecs
         
     def set_altitude(self, altitude):
         self.__altitude = altitude
@@ -203,6 +209,12 @@ class EgoStatusClass():
     
     def __get_rotation(self):
         return Vector3(self.__vel_roll, self.__vel_pitch, self.__vel_yaw)
+    
+    def __get_gpsweek(self):
+        return self.__gpsweek
+    
+    def __get_gpsmsecs(self):
+        return self.__gpsmsecs
         
     def publish_ego_status_data(self):
         ego_status_msg = ego_status()
@@ -212,6 +224,8 @@ class EgoStatusClass():
         ego_status_msg.acc_lin = self.__get_acceleration()
         ego_status_msg.orientation = self.__get_orientation()
         ego_status_msg.vel_rot = self.__get_rotation()
+        ego_status_msg.gps_week = self.__get_gpsweek()
+        ego_status_msg.gps_millisecs = self.__get_gpsmsecs()
         return ego_status_msg
         
 
@@ -357,6 +371,13 @@ def decode_CAN_data():
             gps_data.set_lat_long(latitude=lat, longitude=longi) 
             gps_data.set_time(secs=secs, nsecs=nsecs)
             ego_data.set_lat_long(lat, longi)
+            
+        def __gps_time():
+            gpsweek = msgs.loc[1, "GPS_Time_Week"]
+            gpsmsecs = msgs.loc[2, "GPS_Time_Millisec"]
+            print("BLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            print(gpsmsecs)
+            ego_data.set_adma_time(gpsweek, gpsmsecs)
         
         def __analogin():
             print(can_identifier+" Analog Input data = ", msgs)
@@ -386,7 +407,8 @@ def decode_CAN_data():
                 base_id_adma+56: __ins_time_utc,
                 base_id_adma+57: __gps_absolut,
                 base_id_adma+73: __vel_horizontal,
-                base_id_adma+84: __analogin
+                base_id_adma+84: __analogin,
+                base_id_adma+46: __gps_time
             }
             func = switcher.get(can_id, __default)
             return func()
